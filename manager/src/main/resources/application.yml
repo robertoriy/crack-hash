@@ -1,0 +1,14 @@
+app:
+  max-word-length: 5
+
+spring:
+  application:
+    name: manager
+  jackson:
+    time-zone: UTC
+
+server:
+  port: 8090
+
+logging:
+  config: classpath:log4j2-plain.xml

@@ -1,0 +1,13 @@
+app:
+  worker-value: 3
+spring:
+  application:
+    name: worker
+  jackson:
+    time-zone: UTC
+
+server:
+  port: 8090
+
+logging:
+  config: classpath:log4j2-plain.xml
