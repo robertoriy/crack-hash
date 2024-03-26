@@ -21,7 +21,7 @@ public class InternalController {
 
     @PatchMapping("/hash/crack/request")
     public ResponseEntity<HttpStatus> update(
-            @RequestBody WorkerRequest workerRequest
+        @RequestBody WorkerRequest workerRequest
     ) {
         try {
             managerService.update(workerRequest);
