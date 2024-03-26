@@ -1,5 +1,5 @@
 app:
-  max-word-length: 5
+  max-word-length: ${MAX_VALUE}
 
 spring:
   application:
@@ -8,7 +8,13 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: ${MANAGER_PORT}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
 
 logging:
   config: classpath:log4j2-plain.xml
