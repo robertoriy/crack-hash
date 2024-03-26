@@ -21,7 +21,7 @@ public class InternalController {
 
     @PatchMapping("/hash/crack/request")
     public ResponseEntity<HttpStatus> update(
-        @RequestBody WorkerRequest workerRequest
+            @RequestBody WorkerRequest workerRequest
     ) {
         try {
             managerService.update(workerRequest);
@@ -29,7 +29,7 @@ public class InternalController {
         } catch (NoSuchRequestException exception) {
             return ResponseEntity.notFound().build();
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
