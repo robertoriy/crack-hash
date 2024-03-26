@@ -1,0 +1,23 @@
+### POST crack
+POST http://localhost:8090/api/hash/crack
+Accept: application/json
+Content-Type: application/json
+
+{
+    "hash":"e2fc714c4727ee9395f324cd2e7f331f",
+    "maxLength": 4
+}
+
+### GET status
+GET http://localhost:8090/api/hash/status?requestId=a4855eec-c3aa-47b1-8992-11b16927dfec
+Accept: application/json
+
+### PATCH crack
+PATCH http://localhost:8090/internal/api/manager/hash/crack/request
+Accept: application/json
+Content-Type: application/json
+
+{
+    "requestId": "f0ae6a9d-0fac-4da0-a549-a55e8a1ae357",
+    "data": ["hello", "world"]
+}
