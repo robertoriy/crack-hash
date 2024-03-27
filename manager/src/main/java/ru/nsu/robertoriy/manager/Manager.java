@@ -8,14 +8,17 @@ import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 @Slf4j
 @Component
 public class Manager {
-    long value;
+    int maxWordLength;
+    int partCount;
 
     public Manager(ApplicationConfig applicationConfig) {
-        value = applicationConfig.maxWordLength();
+        maxWordLength = applicationConfig.maxWordLength();
+        partCount = applicationConfig.partCount();
     }
 
     @PostConstruct
     public void test() {
-        log.info(String.valueOf(value));
+        log.info(String.valueOf(maxWordLength));
+        log.info(String.valueOf(partCount));
     }
 }

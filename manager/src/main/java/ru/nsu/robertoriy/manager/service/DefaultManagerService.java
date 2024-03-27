@@ -2,23 +2,29 @@ package ru.nsu.robertoriy.manager.service;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.manager.dto.request.CrackRequest;
-import ru.nsu.robertoriy.manager.dto.request.ManagerRequest;
+import ru.nsu.robertoriy.manager.dto.request.TaskRequest;
 import ru.nsu.robertoriy.manager.dto.request.WorkerRequest;
 import ru.nsu.robertoriy.manager.dto.response.CrackResponse;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 import ru.nsu.robertoriy.manager.model.CrackStatus;
 import ru.nsu.robertoriy.manager.repository.ManagerRepository;
+import ru.nsu.robertoriy.manager.service.cracking.CrackingUtils;
 import ru.nsu.robertoriy.manager.service.exception.NoSuchRequestException;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class DefaultManagerService implements ManagerService {
     private final ManagerRepository managerRepository;
+    private final int partCount;
+
+    public DefaultManagerService(ApplicationConfig applicationConfig, ManagerRepository managerRepository) {
+        partCount = applicationConfig.partCount();
+        this.managerRepository = managerRepository;
+    }
 
     @Override
     public CrackResponse crack(CrackRequest crackRequest) {
@@ -31,8 +37,15 @@ public class DefaultManagerService implements ManagerService {
         log.info("Generated RequestId - {}", requestId);
 
         // send to worker
-        ManagerRequest managerRequest = new ManagerRequest(requestId, crackRequest);
-        log.info("ManagerRequest - {}", managerRequest);
+        TaskRequest taskRequest = new TaskRequest(
+            requestId,
+            crackRequest.hash(),
+            CrackingUtils.ALPHABET,
+            crackRequest.maxLength(),
+            partCount,
+            0
+        );
+        log.info("ManagerRequest - {}", taskRequest);
         // webclient.send
         log.info("Sending task to worker");
 

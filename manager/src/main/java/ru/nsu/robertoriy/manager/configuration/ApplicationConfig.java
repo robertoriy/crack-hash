@@ -8,8 +8,12 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
-    @Min(value = 1, message = "Word length must be positive")
-    @Max(value = 6, message = "Word length must be less than 7")
-    long maxWordLength
+    @Min(value = 1, message = "Max word length must be positive")
+    @Max(value = 6, message = "Max word length must be less than 7")
+    int maxWordLength,
+
+    @Min(value = 1, message = "Part count must be positive")
+    @Max(value = 9, message = "Part Count must be less than 10")
+    int partCount
 ) {
 }

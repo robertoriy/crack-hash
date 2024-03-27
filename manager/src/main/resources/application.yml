@@ -1,5 +1,6 @@
 app:
-  max-word-length: ${MAX_VALUE}
+  max-word-length: ${MAX_WORD_LENGTH:4}
+  part-count: ${PART_COUNT:1}
 
 spring:
   application:
