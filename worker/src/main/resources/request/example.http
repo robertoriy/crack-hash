@@ -1,0 +1,27 @@
+#POST http://localhost:8090/internal/api/worker/hash/crack/task
+#Accept: application/json
+#Content-Type: application/json
+#
+#{
+#    "requestId": "d9163e8b-cf0f-4b84-9f44-0d416522e3ac",
+#    "hash":"e2fc714c4727ee9395f324cd2e7f331f",
+#    "alphabet": "abcdefghijklmnopqrstuvwxyz0123456789",
+#    "maxLength": 4,
+#    "partCount": 1,
+#    "partNumber": 1
+#}
+
+
+### POST crack
+POST http://localhost:8091/internal/api/worker/hash/crack/task
+Accept: application/json
+Content-Type: application/json
+
+{
+    "requestId": "d9163e8b-cf0f-4b84-9f44-0d416522e3ac",
+    "hash":"7365b909b3b69229e51f92c2a157d0c1",
+    "alphabet": "abcdefghijklmnopqrstuvwxyz0123456789",
+    "maxLength": 4,
+    "partCount": 1,
+    "partNumber": 0
+}

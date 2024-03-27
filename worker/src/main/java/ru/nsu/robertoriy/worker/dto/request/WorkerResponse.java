@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.worker.dto.response;
+package ru.nsu.robertoriy.worker.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

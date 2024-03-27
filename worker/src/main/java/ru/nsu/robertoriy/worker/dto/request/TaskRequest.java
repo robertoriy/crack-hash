@@ -6,10 +6,18 @@ import java.util.UUID;
 
 @JsonPropertyOrder({
     "requestId",
-    "crackRequest"
+    "hash",
+    "alphabet",
+    "maxLength",
+    "partCount",
+    "partNumber"
 })
-public record ManagerRequest(
+public record TaskRequest(
     @JsonProperty("requestId") UUID requestId,
-    @JsonProperty("crackRequest") CrackRequest crackRequest
+    @JsonProperty("hash") String hash,
+    @JsonProperty("alphabet") String alphabet,
+    @JsonProperty("maxLength") int maxLength,
+    @JsonProperty("partCount") int partCount,
+    @JsonProperty("partNumber") int partNumber
 ) {
 }

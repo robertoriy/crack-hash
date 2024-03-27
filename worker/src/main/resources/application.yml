@@ -1,5 +1,5 @@
 app:
-  worker-value: 3
+  worker-value: 4
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     time-zone: UTC
 
 server:
-  port: ${WORKER_HOST}
+  port: ${WORKER_PORT:8091}
 
 springdoc:
   swagger-ui:
