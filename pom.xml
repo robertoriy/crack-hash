@@ -32,9 +32,9 @@
         <org.springdoc.version>2.4.0</org.springdoc.version>
 
         <!-- Other -->
+        <lombok.version>1.18.30</lombok.version>
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
-        <!--        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>-->
 
         <!-- Tests -->
         <skip.unit.tests>false</skip.unit.tests>
@@ -111,11 +111,6 @@
                 <version>${org.springdoc.version}</version>
             </dependency>
 
-            <!--            <dependency>-->
-            <!--                <groupId>org.mapstruct</groupId>-->
-            <!--                <artifactId>mapstruct</artifactId>-->
-            <!--                <version>${org.mapstruct.version}</version>-->
-            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
