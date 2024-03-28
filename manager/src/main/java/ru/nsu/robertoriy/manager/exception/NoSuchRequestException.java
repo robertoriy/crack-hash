@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.manager.service.exception;
+package ru.nsu.robertoriy.manager.exception;
 
 public class NoSuchRequestException extends RuntimeException {
     public NoSuchRequestException() {

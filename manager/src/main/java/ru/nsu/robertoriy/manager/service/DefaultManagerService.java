@@ -3,26 +3,33 @@ package ru.nsu.robertoriy.manager.service;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.manager.dto.request.CrackRequest;
 import ru.nsu.robertoriy.manager.dto.request.TaskRequest;
 import ru.nsu.robertoriy.manager.dto.request.WorkerRequest;
 import ru.nsu.robertoriy.manager.dto.response.CrackResponse;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
+import ru.nsu.robertoriy.manager.exception.NoSuchRequestException;
 import ru.nsu.robertoriy.manager.model.CrackStatus;
 import ru.nsu.robertoriy.manager.repository.ManagerRepository;
 import ru.nsu.robertoriy.manager.service.cracking.CrackingUtils;
-import ru.nsu.robertoriy.manager.service.exception.NoSuchRequestException;
+import ru.nsu.robertoriy.manager.service.integration.IntegrationService;
 
 @Slf4j
-@Component
+@Service
 public class DefaultManagerService implements ManagerService {
+    private final IntegrationService integrationService;
     private final ManagerRepository managerRepository;
     private final int partCount;
 
-    public DefaultManagerService(ApplicationConfig applicationConfig, ManagerRepository managerRepository) {
+    public DefaultManagerService(
+        ApplicationConfig applicationConfig,
+        ManagerRepository managerRepository,
+        IntegrationService integrationService
+    ) {
         partCount = applicationConfig.partCount();
+        this.integrationService = integrationService;
         this.managerRepository = managerRepository;
     }
 
@@ -37,17 +44,18 @@ public class DefaultManagerService implements ManagerService {
         log.info("Generated RequestId - {}", requestId);
 
         // send to worker
-        TaskRequest taskRequest = new TaskRequest(
-            requestId,
-            crackRequest.hash(),
-            CrackingUtils.ALPHABET,
-            crackRequest.maxLength(),
-            partCount,
-            0
-        );
-        log.info("ManagerRequest - {}", taskRequest);
-        // webclient.send
-        log.info("Sending task to worker");
+        for (int i = 0; i < partCount; i++) {
+            TaskRequest taskRequest = new TaskRequest(
+                requestId,
+                crackRequest.hash(),
+                CrackingUtils.ALPHABET,
+                crackRequest.maxLength(),
+                partCount,
+                i
+            );
+            integrationService.sendTaskToWorkers(taskRequest);
+            log.info("ManagerRequest - {}", taskRequest);
+        }
 
         return new CrackResponse(requestId);
     }

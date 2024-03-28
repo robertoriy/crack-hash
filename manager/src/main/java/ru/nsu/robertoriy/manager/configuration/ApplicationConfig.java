@@ -14,6 +14,8 @@ public record ApplicationConfig(
 
     @Min(value = 1, message = "Part count must be positive")
     @Max(value = 9, message = "Part Count must be less than 10")
-    int partCount
+    int partCount,
+
+    String workerUrl
 ) {
 }

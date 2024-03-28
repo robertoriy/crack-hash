@@ -4,12 +4,12 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "hash":"e2fc714c4727ee9395f324cd2e7f331f",
-    "maxLength": 4
+    "hash":"5d41402abc4b2a76b9719d911017c592",
+    "maxLength": 5
 }
 
 ### GET status
-GET http://localhost:8090/api/hash/status?requestId=d9163e8b-cf0f-4b84-9f44-0d416522e3ac
+GET http://localhost:8090/api/hash/status?requestId=0de235a4-7981-41c6-8b26-fbed28cf3c13
 Accept: application/json
 
 ### PATCH crack

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.robertoriy.manager.dto.request.WorkerRequest;
 import ru.nsu.robertoriy.manager.service.ManagerService;
-import ru.nsu.robertoriy.manager.service.exception.NoSuchRequestException;
+import ru.nsu.robertoriy.manager.exception.NoSuchRequestException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,16 +20,18 @@ public class InternalController {
     private final ManagerService managerService;
 
     @PatchMapping("/hash/crack/request")
-    public ResponseEntity<HttpStatus> update(
+    public void update(
         @RequestBody WorkerRequest workerRequest
     ) {
         try {
+            log.info("Update hash request - {}", workerRequest);
             managerService.update(workerRequest);
-            return ResponseEntity.ok().build();
         } catch (NoSuchRequestException exception) {
-            return ResponseEntity.notFound().build();
+//            return ResponseEntity.notFound().build();
+            log.error("Error no such request- {}", exception.getMessage());
         } catch (Exception exception) {
-            return ResponseEntity.internalServerError().build();
+            log.error("Error update hash request - {}", exception.getMessage());
+//            return ResponseEntity.internalServerError().build();
         }
     }
 }

@@ -14,7 +14,7 @@ import ru.nsu.robertoriy.manager.dto.request.CrackRequest;
 import ru.nsu.robertoriy.manager.dto.response.CrackResponse;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 import ru.nsu.robertoriy.manager.service.ManagerService;
-import ru.nsu.robertoriy.manager.service.exception.NoSuchRequestException;
+import ru.nsu.robertoriy.manager.exception.NoSuchRequestException;
 
 @Slf4j
 @RequiredArgsConstructor

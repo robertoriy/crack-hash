@@ -10,7 +10,6 @@ import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 
 @Configuration
 public class BeanConfig {
-
     @Bean
     @Scope("prototype")
     public Map<UUID, StatusResponse> getStatusResponseMap() {
