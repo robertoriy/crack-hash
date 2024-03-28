@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @Min(value = 1, message = "Word length must be positive")
     @Max(value = 6, message = "Word length must be less than 7")
-    long workerValue
+    long workerValue,
+    String managerUrl
 ) {
 }

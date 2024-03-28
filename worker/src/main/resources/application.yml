@@ -1,5 +1,6 @@
 app:
   worker-value: 4
+  manager-url: http://localhost:${MANAGER_PORT}
 
 spring:
   application:
