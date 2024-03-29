@@ -1,7 +1,7 @@
 package ru.nsu.robertoriy.worker.service.integration;
 
-import ru.nsu.robertoriy.worker.dto.request.WorkerResponse;
+import ru.nsu.robertoriy.worker.dto.request.WorkerRequest;
 
 public interface IntegrationService {
-    void sendDataToManager(WorkerResponse workerResponse);
+    void sendDataToManager(WorkerRequest workerRequest);
 }

@@ -9,7 +9,7 @@ import ru.nsu.robertoriy.worker.dto.request.WorkerRequest;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class DefaultIntegrationService implements IntegrationService {
+public class HttpIntegrationService implements IntegrationService {
     private final ManagerClient managerClient;
 
     @Override
@@ -23,6 +23,6 @@ public class DefaultIntegrationService implements IntegrationService {
         managerClient.sendData(workerRequest)
             .subscribe(response -> log.info("Response from manager. Status code: {}", response.getStatusCode()));
 
-        log.info("Sent Data To Manager");
+        log.info("Sent data tot manager");
     }
 }
