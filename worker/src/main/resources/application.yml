@@ -1,6 +1,6 @@
 app:
-  worker-value: 4
-  manager-url: http://localhost:${MANAGER_PORT}
+  max-word-length: ${MAX_WORD_LENGTH:7}
+  manager-url: http://${MANAGER_HOST}:${MANAGER_PORT}
 
 spring:
   application:

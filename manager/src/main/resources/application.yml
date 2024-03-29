@@ -1,7 +1,8 @@
 app:
-  max-word-length: ${MAX_WORD_LENGTH:4}
   part-count: ${PART_COUNT:1}
-  worker-url: http://localhost:${WORKER_PORT}
+  worker-url: http://${WORKER_HOST}:${WORKER_PORT}
+  timeout: ${TIMEOUT:60}
+  alphabet: ${ALPHABET}
 
 spring:
   application:
