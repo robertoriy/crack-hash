@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.manager.service;
+package ru.nsu.robertoriy.manager.service.manager;
 
 import java.util.UUID;
 import ru.nsu.robertoriy.manager.dto.request.CrackRequest;
