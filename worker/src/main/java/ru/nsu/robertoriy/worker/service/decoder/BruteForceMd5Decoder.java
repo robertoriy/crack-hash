@@ -10,31 +10,48 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.paukov.combinatorics3.Generator;
 import org.springframework.stereotype.Service;
+import ru.nsu.robertoriy.worker.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.worker.exception.HashCrackingException;
 import ru.nsu.robertoriy.worker.model.Task;
 
 @Slf4j
 @Service
 public class BruteForceMd5Decoder implements Md5Decoder {
+    private final int maxWordLength;
+
+    public BruteForceMd5Decoder(ApplicationConfig applicationConfig) {
+        maxWordLength = applicationConfig.maxWordLength();
+    }
+
     @Override
     public List<String> decode(Task task) {
+        checkMaxWordLength(task.maxLength());
+
         CrackingProperties properties = getCrackingProperties(task);
+        log.info("Passwords search begins");
 
         return passwords(properties.alphabet(), task.maxLength())
-            .sorted()
             .skip(properties.toSkip())
             .limit(properties.toTake())
-            .filter(pass -> task.hash().equals(getMd5Hash(pass)))
+            .filter(password -> task.hash().equals(getMd5Hash(password)))
             .toList();
+    }
+
+    private void checkMaxWordLength(int value) {
+        if (value > maxWordLength) {
+            log.error("Max word length is greater than the config one");
+            throw new HashCrackingException("Max word length is greater than " + maxWordLength);
+        }
     }
 
     private CrackingProperties getCrackingProperties(Task task) {
         List<Character> alphabet = task.alphabet()
             .chars()
-            .mapToObj(c -> (char) c)
+            .mapToObj(character -> (char) character)
             .toList();
 
         long numberOfPasswords = getNumberOfAllPasswords(alphabet, task.maxLength());
+        log.info("Number of all possible passwords: {}", numberOfPasswords);
 
         long passwordsToTake = (long) Math.ceil((double) numberOfPasswords / task.partCount());
         long passwordsToSkip = task.partNumber() * passwordsToTake;
