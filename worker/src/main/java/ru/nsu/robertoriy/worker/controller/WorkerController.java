@@ -2,14 +2,14 @@ package ru.nsu.robertoriy.worker.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.robertoriy.worker.dto.request.TaskRequest;
-import ru.nsu.robertoriy.worker.dto.request.WorkerResponse;
-import ru.nsu.robertoriy.worker.mapper.TaskMapper;
+import ru.nsu.robertoriy.worker.exception.HashCrackingException;
 import ru.nsu.robertoriy.worker.service.worker.WorkerService;
 
 @Slf4j
@@ -20,27 +20,17 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @PostMapping("/hash/crack/task")
-    public void crackHash(
+    public ResponseEntity<HttpStatus> crackHash(
         @RequestBody TaskRequest taskRequest
     ) {
+        log.info("Received: task - {}", taskRequest);
         try {
-            log.info("{}", TaskMapper.INSTANCE.taskRequestToTask(taskRequest));
             workerService.completeTask(taskRequest);
-        } catch (Exception e) {
-            log.error("{}", e);
+            return ResponseEntity.ok().build();
+        } catch (HashCrackingException exception) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().build();
         }
     }
-
-//    @PostMapping("/hash/crack/task")
-//    public ResponseEntity<WorkerResponse> crackHash(
-//        @RequestBody TaskRequest taskRequest
-//    ) {
-//        try {
-//            log.info("{}", TaskMapper.INSTANCE.taskRequestToTask(taskRequest));
-//            var response = workerService.completeTask(taskRequest);
-//            return ResponseEntity.ok(response);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
 }

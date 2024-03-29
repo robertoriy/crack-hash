@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.nsu.robertoriy.manager.dto.request.CrackRequest;
 import ru.nsu.robertoriy.manager.dto.response.CrackResponse;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
-import ru.nsu.robertoriy.manager.service.ManagerService;
 import ru.nsu.robertoriy.manager.exception.NoSuchRequestException;
+import ru.nsu.robertoriy.manager.exception.ServiceException;
+import ru.nsu.robertoriy.manager.service.manager.ManagerService;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class ManagerController {
     public ResponseEntity<CrackResponse> crackHash(
         @RequestBody CrackRequest crackRequest
     ) {
+        log.info("Received: request for cracking hash");
         try {
             CrackResponse crackResponse = managerService.crack(crackRequest);
             log.info("Crack hash response - {}", crackResponse);
@@ -40,12 +42,15 @@ public class ManagerController {
     public ResponseEntity<StatusResponse> getStatus(
         @RequestParam("requestId") UUID requestId
     ) {
+        log.info("Received: get status of - {}", requestId);
         try {
             StatusResponse statusResponse = managerService.status(requestId);
             log.info("Status hash response - {}", statusResponse);
             return ResponseEntity.ok(statusResponse);
         } catch (NoSuchRequestException exception) {
             return ResponseEntity.notFound().build();
+        } catch (ServiceException exception) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception exception) {
             return ResponseEntity.internalServerError().build();
         }
