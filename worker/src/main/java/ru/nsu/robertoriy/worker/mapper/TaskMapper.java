@@ -1,7 +1,6 @@
 package ru.nsu.robertoriy.worker.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.nsu.robertoriy.worker.dto.request.TaskRequest;
 import ru.nsu.robertoriy.worker.model.Task;

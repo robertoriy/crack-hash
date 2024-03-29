@@ -9,7 +9,7 @@ import java.util.UUID;
     "requestId",
     "data"
 })
-public record WorkerResponse(
+public record WorkerRequest(
     @JsonProperty("requestId") UUID requestId,
     @JsonProperty("data") List<String> data
 ) {
