@@ -3,7 +3,7 @@ package ru.nsu.robertoriy.manager.repository;
 import java.util.UUID;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 
-public interface ManagerRepository {
+public interface RequestRepository {
     UUID save(StatusResponse statusResponse);
 
     StatusResponse get(UUID requestId);

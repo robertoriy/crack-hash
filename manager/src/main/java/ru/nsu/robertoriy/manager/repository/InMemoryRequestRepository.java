@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 
 @Component
-public class InMemoryManagerRepository implements ManagerRepository {
+public class InMemoryRequestRepository implements RequestRepository {
     private final Map<UUID, StatusResponse> statusResponses;
 
     @Autowired
-    public InMemoryManagerRepository(Map<UUID, StatusResponse> statusResponses) {
+    public InMemoryRequestRepository(Map<UUID, StatusResponse> statusResponses) {
         this.statusResponses = statusResponses;
     }
 
