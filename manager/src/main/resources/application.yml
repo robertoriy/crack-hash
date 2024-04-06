@@ -1,5 +1,8 @@
 app:
-  max-word-length: 5
+  part-count: ${PART_COUNT:1}
+  worker-url: http://${WORKER_HOST}:${WORKER_PORT}
+  timeout: ${TIMEOUT:60}
+  alphabet: ${ALPHABET}
 
 spring:
   application:
@@ -8,7 +11,13 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: ${MANAGER_PORT}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
 
 logging:
   config: classpath:log4j2-plain.xml

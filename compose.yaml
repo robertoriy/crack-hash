@@ -1,1 +1,22 @@
+version: '3'
+
 services:
+  manager-service:
+    build: manager
+    env_file: "./.env"
+    ports:
+      - "${MANAGER_PORT}:${MANAGER_PORT}"
+    networks:
+      - crack-hash-network
+
+  worker-service:
+    build: worker
+    env_file: "./.env"
+    ports:
+      - "${WORKER_PORT}:${WORKER_PORT}"
+    networks:
+      - crack-hash-network
+
+networks:
+  crack-hash-network:
+    driver: bridge

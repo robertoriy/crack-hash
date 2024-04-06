@@ -1,5 +1,7 @@
 app:
-  worker-value: 3
+  max-word-length: ${MAX_WORD_LENGTH:7}
+  manager-url: http://${MANAGER_HOST}:${MANAGER_PORT}
+
 spring:
   application:
     name: worker
@@ -7,7 +9,13 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: ${WORKER_PORT:8091}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /api-docs
 
 logging:
   config: classpath:log4j2-plain.xml
