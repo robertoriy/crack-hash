@@ -1,15 +1,27 @@
 app:
   max-word-length: ${MAX_WORD_LENGTH:7}
-  manager-url: http://${MANAGER_HOST}:${MANAGER_PORT}
+  manager-url: ${MANAGER_URL}
+
+messaging:
+  exchange-name: ${DIRECT_EXCHANGE_NAME}
+  task-queue: ${TASK_QUEUE_NAME}
+  task-routing-key: ${TASK_ROUTING_KEY}
+  result-queue: ${RESULT_QUEUE_NAME}
+  result-routing-key: ${RESULT_ROUTING_KEY}
+
+server:
+  port: ${WORKER_PORT:8091}
 
 spring:
   application:
     name: worker
   jackson:
     time-zone: UTC
-
-server:
-  port: ${WORKER_PORT:8091}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_AMQP_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 springdoc:
   swagger-ui:

@@ -1,17 +1,29 @@
 app:
   part-count: ${PART_COUNT:1}
-  worker-url: http://${WORKER_HOST}:${WORKER_PORT}
+  worker-url: ${WORKER_URL}
   timeout: ${TIMEOUT:60}
   alphabet: ${ALPHABET}
+
+messaging:
+  exchange-name: ${DIRECT_EXCHANGE_NAME}
+  task-queue: ${TASK_QUEUE_NAME}
+  task-routing-key: ${TASK_ROUTING_KEY}
+  result-queue: ${RESULT_QUEUE_NAME}
+  result-routing-key: ${RESULT_ROUTING_KEY}
+
+server:
+  port: ${MANAGER_PORT:8090}
 
 spring:
   application:
     name: manager
   jackson:
     time-zone: UTC
-
-server:
-  port: ${MANAGER_PORT}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_AMQP_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 springdoc:
   swagger-ui:

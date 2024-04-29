@@ -1,19 +1,53 @@
-version: '3'
+version: '3.8'
 
 services:
   manager-service:
     build: manager
+    container_name: manager-service
     env_file: "./.env"
     ports:
       - "${MANAGER_PORT}:${MANAGER_PORT}"
     networks:
       - crack-hash-network
+    depends_on:
+      - rabbitmq
+      - mongo-db
 
   worker-service:
     build: worker
+    container_name: worker-service
     env_file: "./.env"
     ports:
       - "${WORKER_PORT}:${WORKER_PORT}"
+    networks:
+      - crack-hash-network
+    depends_on:
+      - manager-service
+      - rabbitmq
+      - mongo-db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    env_file: "./.env"
+    ports:
+      - "${RABBITMQ_AMQP_PORT}:${RABBITMQ_AMQP_PORT}"              # AMQP
+      - "${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}"  # Management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    networks:
+      - crack-hash-network
+
+  mongo-db:
+    image: mongo:latest
+    container_name: mongo-db
+    env_file: "./.env"
+    ports:
+      - '${MONGO_PORT}:${MONGO_PORT}'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     networks:
       - crack-hash-network
 
