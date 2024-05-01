@@ -1,6 +1,6 @@
 app:
-  max-word-length: ${MAX_WORD_LENGTH:7}
   manager-url: ${MANAGER_URL}
+  max-word-length: ${MAX_WORD_LENGTH:7}
 
 messaging:
   exchange-name: ${DIRECT_EXCHANGE_NAME}
@@ -13,6 +13,8 @@ server:
   port: ${WORKER_PORT:8091}
 
 spring:
+  profiles:
+    active: ${PROFILE}
   application:
     name: worker
   jackson:

@@ -1,8 +1,9 @@
 app:
   part-count: ${PART_COUNT:1}
-  worker-url: ${WORKER_URL}
-  timeout: ${TIMEOUT:60}
   alphabet: ${ALPHABET}
+  timeout: ${TIMEOUT:60}
+  max-word-length: ${MAX_WORD_LENGTH:7}
+  worker-url: ${WORKER_URL}
 
 messaging:
   exchange-name: ${DIRECT_EXCHANGE_NAME}
@@ -15,6 +16,8 @@ server:
   port: ${MANAGER_PORT:8090}
 
 spring:
+  profiles:
+    active: ${PROFILE}
   application:
     name: manager
   jackson:
@@ -24,6 +27,14 @@ spring:
     port: ${RABBITMQ_AMQP_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      uri: ${MONGO_URI}
+
 
 springdoc:
   swagger-ui:
