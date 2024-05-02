@@ -13,12 +13,16 @@ public record ApplicationConfig(
     @Max(value = 9, message = "Part Count must be less than 10")
     int partCount,
 
-    @NotBlank String workerUrl,
+    @NotBlank String alphabet,
+
+    @Min(value = 1, message = "Word length must be positive")
+    @Max(value = 7, message = "Word length must be less than 8")
+    int maxWordLength,
 
     @Min(value = 10, message = "Max word length must be greater than 10 seconds")
     @Max(value = 300, message = "Part Count must be less than 5 minutes")
     int timeout,
 
-    String alphabet
+    @NotBlank String workerUrl
 ) {
 }
