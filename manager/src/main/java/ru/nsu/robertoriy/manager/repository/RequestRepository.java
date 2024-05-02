@@ -9,6 +9,4 @@ public interface RequestRepository {
     StatusResponse get(UUID requestId);
 
     void update(UUID requestId, StatusResponse statusResponse);
-
-    void delete(UUID requestId);
 }

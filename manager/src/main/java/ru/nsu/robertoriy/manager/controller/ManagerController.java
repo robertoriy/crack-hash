@@ -33,7 +33,10 @@ public class ManagerController {
             CrackResponse crackResponse = managerService.crack(crackRequest);
             log.info("Crack hash response - {}", crackResponse);
             return ResponseEntity.ok(crackResponse);
+        } catch (ServiceException exception) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception exception) {
+            log.error("{} {}", exception, exception.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
