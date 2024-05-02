@@ -7,8 +7,10 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("distributed")
 public class RabbitMQConfig {
     @Bean
     public DirectExchange directExchange(RabbitMQPropertiesConfig config) {

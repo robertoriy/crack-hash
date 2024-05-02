@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.manager.service.integration.http;
+package ru.nsu.robertoriy.manager.service.integration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.client.WorkerClient;
 import ru.nsu.robertoriy.manager.dto.request.TaskRequest;
-import ru.nsu.robertoriy.manager.service.integration.IntegrationService;
 
 @Slf4j
 @RequiredArgsConstructor

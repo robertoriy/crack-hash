@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 
@@ -14,6 +15,7 @@ import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 public class ManagerConfig {
     @Bean
     @Scope("prototype")
+    @Profile("simple")
     public Map<UUID, StatusResponse> getStatusResponseMap() {
         return new ConcurrentHashMap<>();
     }
@@ -25,6 +27,7 @@ public class ManagerConfig {
 
     @Bean
     @Scope("prototype")
+    @Profile("simple")
     public Map<UUID, Integer> getCounterMap() {
         return new ConcurrentHashMap<>();
     }
