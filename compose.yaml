@@ -17,13 +17,13 @@ services:
 
   worker-service:
     build: worker
-    container_name: worker-service
+#    container_name: worker-service
     env_file: "./.env"
-    ports:
-      - "${WORKER_PORT}:${WORKER_PORT}"
-#    deploy:
-#      mode: replicated
-#      replicas: 3
+#    ports:
+#      - "${WORKER_PORT}:${WORKER_PORT}"
+    deploy:
+      mode: replicated
+      replicas: 2
     depends_on:
       rabbitmq:
         condition: service_healthy
