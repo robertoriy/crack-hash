@@ -1,7 +1,7 @@
 package ru.nsu.robertoriy.worker.service.worker;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,26 +17,21 @@ import ru.nsu.robertoriy.worker.service.integration.IntegrationService;
 public class DefaultWorkerService implements WorkerService {
     private final Md5Decoder md5Decoder;
     private final IntegrationService integrationService;
-    private final ExecutorService executorService;
 
-    public void completeTask(TaskRequest taskRequest) {
+    public List<String> completeTask(TaskRequest taskRequest) {
         log.info("Completing task for request id: {}", taskRequest.requestId());
 
-        executorService.submit(
-            () -> {
-                List<String> data = md5Decoder.decode(TaskMapper.INSTANCE.taskRequestToTask(taskRequest));
+        return md5Decoder.decode(TaskMapper.INSTANCE.taskRequestToTask(taskRequest));
+    }
 
-                if (!data.isEmpty()) {
-                    integrationService.sendDataToManager(
-                        new WorkerRequest(
-                            taskRequest.requestId(),
-                            data
-                        )
-                    );
-                }
-            }
+    @Override
+    public void sendTask(UUID requestId, List<String> data) {
+        integrationService.sendDataToManager(
+            new WorkerRequest(
+                requestId,
+                data
+            )
         );
-
-        log.info("The task with requestId - {} has been submitted for execution", taskRequest.requestId());
+        log.info("The task with requestId - {} has been completed", requestId);
     }
 }
