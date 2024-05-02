@@ -1,6 +1,5 @@
 package ru.nsu.robertoriy.manager.service.storage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,12 +14,12 @@ import ru.nsu.robertoriy.manager.repository.RequestRepository;
 @Slf4j
 @Service
 @Profile("simple")
-public class DefaultStorageService implements StorageService {
+public class InMemoryStorageService implements StorageService {
     private final RequestRepository requestRepository;
     private final Map<UUID, Integer> updateCounter;
     private final int partCount;
 
-    public DefaultStorageService(
+    public InMemoryStorageService(
         ApplicationConfig applicationConfig,
         RequestRepository requestRepository,
         Map<UUID, Integer> updateCounter
@@ -44,7 +43,7 @@ public class DefaultStorageService implements StorageService {
     }
 
     @Override
-    public void updateRequest(UUID requestId, List<String> data) {
+    public synchronized void updateRequest(UUID requestId, List<String> data) {
         checkExistence(requestId);
         checkCorrectState(requestId);
 
@@ -68,7 +67,7 @@ public class DefaultStorageService implements StorageService {
     private void checkCorrectState(UUID requestId) {
         CrackStatus currentStatus = requestRepository.get(requestId).status();
 
-        if (currentStatus == CrackStatus.ERROR) {
+        if (currentStatus == CrackStatus.ERROR || currentStatus == CrackStatus.READY) {
             throw new IllegalStateException();
         }
 
@@ -77,16 +76,23 @@ public class DefaultStorageService implements StorageService {
         }
     }
 
-    private synchronized void addDataToRequest(UUID requestId, List<String> data) {
+    private void addDataToRequest(UUID requestId, List<String> data) {
         updateCounter.computeIfPresent(requestId, (k, v) -> v + 1);
 
         List<String> newData = requestRepository.get(requestId).data();
         if (newData == null) {
-            newData = new ArrayList<>();
+            newData = data;
+        } else {
+            newData.addAll(data);
         }
-        newData.addAll(data);
 
-        StatusResponse statusToUpdate = new StatusResponse(CrackStatus.READY, newData);
+        CrackStatus newStatus = requestRepository.get(requestId).status();
+
+        if (updateCounter.get(requestId) == partCount) {
+            newStatus = CrackStatus.READY;
+        }
+
+        StatusResponse statusToUpdate = new StatusResponse(newStatus, newData);
 
         requestRepository.update(requestId, statusToUpdate);
     }
