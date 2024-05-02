@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
@@ -13,6 +14,7 @@ import ru.nsu.robertoriy.manager.repository.RequestRepository;
 
 @Slf4j
 @Service
+@Profile("simple")
 public class DefaultStorageService implements StorageService {
     private final RequestRepository requestRepository;
     private final Map<UUID, Integer> updateCounter;
@@ -75,7 +77,7 @@ public class DefaultStorageService implements StorageService {
         }
     }
 
-    private void addDataToRequest(UUID requestId, List<String> data) {
+    private synchronized void addDataToRequest(UUID requestId, List<String> data) {
         updateCounter.computeIfPresent(requestId, (k, v) -> v + 1);
 
         List<String> newData = requestRepository.get(requestId).data();
