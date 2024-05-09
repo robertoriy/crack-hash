@@ -35,6 +35,7 @@ public class InternalController {
         } catch (ServiceException exception) {
             return ResponseEntity.badRequest().build();
         } catch (Exception exception) {
+            log.error("{} {}", exception, exception.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

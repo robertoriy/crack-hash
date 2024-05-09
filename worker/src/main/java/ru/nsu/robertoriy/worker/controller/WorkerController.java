@@ -34,6 +34,7 @@ public class WorkerController {
         } catch (HashCrackingException exception) {
             return ResponseEntity.badRequest().build();
         } catch (Exception exception) {
+            log.error("{} {}", exception, exception.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
