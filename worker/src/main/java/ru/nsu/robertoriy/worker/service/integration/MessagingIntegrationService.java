@@ -1,5 +1,6 @@
 package ru.nsu.robertoriy.worker.service.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -40,9 +41,10 @@ public class MessagingIntegrationService implements IntegrationService {
             String json = objectMapper.writeValueAsString(workerRequest);
 
             rabbitTemplate.convertAndSend(exchangeName, resultRoutingKey, json);
-        } catch (Exception e) {
-            log.error("Error sending data to worker through message queue", e);
-            throw new RuntimeException(e);
+        } catch (JsonProcessingException exception) {
+            log.error("Error while converting dto to json", exception);
+        } catch (Exception exception) {
+            log.error("Error sending data to worker through message queue", exception);
         }
 
         log.info("Sent data to manager through message queue");

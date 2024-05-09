@@ -5,7 +5,6 @@ import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.manager.dto.request.CrackRequest;

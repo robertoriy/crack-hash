@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.manager.repository;
+package ru.nsu.robertoriy.manager.dao;
 
 import java.util.Map;
 import java.util.NoSuchElementException;

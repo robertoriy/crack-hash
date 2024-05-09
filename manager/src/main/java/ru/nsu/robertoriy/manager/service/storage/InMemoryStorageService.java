@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.configuration.ApplicationConfig;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 import ru.nsu.robertoriy.manager.model.CrackStatus;
-import ru.nsu.robertoriy.manager.repository.RequestRepository;
+import ru.nsu.robertoriy.manager.dao.RequestRepository;
 
 @Slf4j
 @Service
