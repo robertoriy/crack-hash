@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.worker.configuration.RabbitMQPropertiesConfig;
 import ru.nsu.robertoriy.worker.dto.request.WorkerRequest;
@@ -29,6 +30,7 @@ public class MessagingIntegrationService implements IntegrationService {
         resultRoutingKey = rabbitConfig.resultRoutingKey();
     }
 
+    @Async
     @Override
     public void sendDataToManager(WorkerRequest workerRequest) {
         log.info(

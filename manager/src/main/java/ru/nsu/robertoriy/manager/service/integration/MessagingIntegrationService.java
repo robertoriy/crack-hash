@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.nsu.robertoriy.manager.configuration.RabbitMQPropertiesConfig;
 import ru.nsu.robertoriy.manager.dto.request.TaskRequest;
@@ -29,6 +30,7 @@ public class MessagingIntegrationService implements IntegrationService {
         taskRoutingKey = rabbitConfig.taskRoutingKey();
     }
 
+    @Async
     @Override
     public void sendTaskToWorkers(TaskRequest taskRequest) {
         log.info("Sending data to worker through message queue, task - {}", taskRequest);
