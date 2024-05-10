@@ -10,7 +10,9 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      mongo-db:
+#      mongo-db:
+#        condition: service_healthy
+      mongo-db-primary:
         condition: service_healthy
     networks:
       - crack-hash-network
@@ -27,14 +29,13 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      manager-service:
-        condition: service_started
     networks:
       - crack-hash-network
 
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
+    hostname: rabbitmq
     env_file: "./.env"
     ports:
       - "${RABBITMQ_AMQP_PORT}:${RABBITMQ_AMQP_PORT}"              # AMQP
@@ -42,33 +43,77 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_PREFETCH_COUNT: 1
     healthcheck:
       test:  ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 15s
       timeout: 10s
       retries: 5
       start_period: 15s
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - crack-hash-network
 
-  mongo-db:
+#  mongo-db:
+#    image: mongo:latest
+#    container_name: mongo-db
+#    env_file: "./.env"
+#    ports:
+#      - '${MONGO_PORT}:${MONGO_PORT}'
+#    healthcheck:
+#      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
+#      interval: 15s
+#      timeout: 10s
+#      retries: 5
+#      start_period: 15s
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+#    volumes:
+#      - mongo-primary-data:/data/db
+#      - mongo-primary-config:/data/configdb
+#    networks:
+#      - crack-hash-network
+
+  mongo-db-primary:
     image: mongo:latest
-    container_name: mongo-db
-    env_file: "./.env"
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+    container_name: mongo-db-primary
     ports:
-      - '${MONGO_PORT}:${MONGO_PORT}'
+      - 27017:27017
     healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' --quiet
-      interval: 15s
-      timeout: 10s
-      retries: 5
-      start_period: 15s
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo-db-primary:27017',priority:1},{_id:1,host:'mongo-db-secondary-1:30001',priority:0.5},{_id:2,host:'mongo-db-secondary-2:30002',priority:0.5}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 20s
+      retries: 20
     volumes:
-      - mongo-data:/data/db
-      - mongo-config:/data/configdb
+      - mongo-primary-data:/data/db
+      - mongo-primary-config:/data/configdb
+    networks:
+      - crack-hash-network
+
+  mongo-db-secondary-1:
+    image: mongo:latest
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "30001" ]
+    container_name: mongo-db-secondary-1
+    ports:
+      - "30001:30001"
+    volumes:
+      - mongo-secondary-1-data:/data/db
+      - mongo-secondary-1-config:/data/configdb
+    networks:
+      - crack-hash-network
+
+  mongo-db-secondary-2:
+    image: mongo:latest
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "30002" ]
+    container_name: mongo-db-secondary-2
+    ports:
+      - "30002:30002"
+    volumes:
+      - mongo-secondary-2-data:/data/db
+      - mongo-secondary-2-config:/data/configdb
     networks:
       - crack-hash-network
 
@@ -78,9 +123,24 @@ networks:
     driver: bridge
 
 volumes:
-  mongo-data:
+  rabbitmq-data:
     driver: local
-    name: "mongo-data"
-  mongo-config:
+    name: "rabbitmq-data"
+  mongo-primary-data:
     driver: local
-    name: "mongo-config"
+    name: "mongo-primary-data"
+  mongo-primary-config:
+    driver: local
+    name: "mongo-primary-config"
+  mongo-secondary-1-data:
+    driver: local
+    name: "mongo-secondary-1-data"
+  mongo-secondary-1-config:
+    driver: local
+    name: "mongo-secondary-1-config"
+  mongo-secondary-2-data:
+    driver: local
+    name: "mongo-secondary-2-data"
+  mongo-secondary-2-config:
+    driver: local
+    name: "mongo-secondary-2-config"
