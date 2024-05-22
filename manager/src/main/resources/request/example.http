@@ -1,4 +1,4 @@
-### POST crack
+### POST crack hello
 POST http://localhost:8090/api/hash/crack
 Accept: application/json
 Content-Type: application/json
@@ -8,9 +8,20 @@ Content-Type: application/json
     "maxLength": 5
 }
 
-### GET status
-GET http://localhost:8090/api/hash/status?requestId=0de235a4-7981-41c6-8b26-fbed28cf3c13
+### POST crack cat
+POST http://localhost:8090/api/hash/crack
 Accept: application/json
+Content-Type: application/json
+
+{
+    "hash":"d077f244def8a70e5ea758bd8352fcd8",
+    "maxLength": 4
+}
+
+### GET status
+GET http://localhost:8090/api/hash/status?requestId=7717ecf9-282a-4c40-af0b-44ade78b44ec
+Accept: application/json
+
 
 ### PATCH crack
 PATCH http://localhost:8090/internal/api/manager/hash/crack/request
@@ -21,3 +32,30 @@ Content-Type: application/json
     "requestId": "320ae502-b84a-4d11-8f51-4722b8708f83",
     "data": ["hello", "world"]
 }
+
+
+### send task
+GET http://localhost:8090/test/rabbit/task
+
+### send result
+GET http://localhost:8091/test/rabbit/result
+
+### create task
+POST http://localhost:8090/test/mongo/task
+Accept: application/json
+Content-Type: application/json
+
+{
+    "hash": 123123,
+    "data": "hello"
+}
+
+### get task
+GET http://localhost:8090/test/mongo/task/66329b45c6947b780fa7a197
+Accept: application/json
+
+### get profile
+GET http://localhost:8090/test/profile
+Accept: application/json
+
+

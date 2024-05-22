@@ -1,13 +1,15 @@
-package ru.nsu.robertoriy.manager.repository;
+package ru.nsu.robertoriy.manager.dao;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
 
 @Component
+@Profile("simple")
 public class InMemoryRequestRepository implements RequestRepository {
     private final Map<UUID, StatusResponse> statusResponses;
 
@@ -37,10 +39,5 @@ public class InMemoryRequestRepository implements RequestRepository {
             throw new NoSuchElementException();
         }
         statusResponses.put(requestId, statusResponse);
-    }
-
-    @Override
-    public void delete(UUID requestId) {
-        statusResponses.remove(requestId);
     }
 }

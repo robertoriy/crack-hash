@@ -1,4 +1,4 @@
-package ru.nsu.robertoriy.manager.repository;
+package ru.nsu.robertoriy.manager.dao;
 
 import java.util.UUID;
 import ru.nsu.robertoriy.manager.dto.response.StatusResponse;
@@ -9,6 +9,4 @@ public interface RequestRepository {
     StatusResponse get(UUID requestId);
 
     void update(UUID requestId, StatusResponse statusResponse);
-
-    void delete(UUID requestId);
 }

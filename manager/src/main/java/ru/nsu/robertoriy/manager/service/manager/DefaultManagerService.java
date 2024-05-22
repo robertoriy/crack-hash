@@ -23,9 +23,7 @@ public class DefaultManagerService implements ManagerService {
     private final IntegrationService integrationService;
     private final StorageService storageService;
     private final ScheduledExecutorService scheduler;
-    private final String alphabet;
-    private final int partCount;
-    private final long timeout;
+    private final ApplicationConfig appConfig;
 
     public DefaultManagerService(
         ApplicationConfig applicationConfig,
@@ -33,17 +31,16 @@ public class DefaultManagerService implements ManagerService {
         IntegrationService integrationService,
         ScheduledExecutorService scheduler
     ) {
-        alphabet = applicationConfig.alphabet();
-        partCount = applicationConfig.partCount();
-        timeout = applicationConfig.timeout();
         this.integrationService = integrationService;
         this.storageService = storageService;
         this.scheduler = scheduler;
+        this.appConfig = applicationConfig;
     }
 
     @Override
     public CrackResponse crack(CrackRequest crackRequest) {
         log.info("Cracking hash - {} - with max length - {}", crackRequest.hash(), crackRequest.maxLength());
+        validateTask(crackRequest);
 
         UUID requestId = storageService.createRequest();
         log.info("Generated RequestId - {}", requestId);
@@ -84,13 +81,13 @@ public class DefaultManagerService implements ManagerService {
     }
 
     private void sendTaskToWorkers(UUID requestId, CrackRequest crackRequest) {
-        for (int i = 0; i < partCount; i++) {
+        for (int i = 0; i < appConfig.partCount(); i++) {
             TaskRequest taskRequest = new TaskRequest(
                 requestId,
                 crackRequest.hash(),
-                alphabet,
+                appConfig.alphabet(),
                 crackRequest.maxLength(),
-                partCount,
+                appConfig.partCount(),
                 i
             );
             log.info("Generated task to worker - {}", i);
@@ -103,8 +100,15 @@ public class DefaultManagerService implements ManagerService {
 
         scheduler.schedule(
             () -> storageService.updateStatusOnTimeout(requestId),
-            timeout,
+            appConfig.timeout(),
             TimeUnit.SECONDS
         );
+    }
+
+    private void validateTask(CrackRequest crackRequest) {
+        if (crackRequest.maxLength() >= appConfig.maxWordLength()) {
+            log.info("Task rejected: invalid maximum word length");
+            throw new ServiceException(new IllegalArgumentException("Invalid maximum word length"));
+        }
     }
 }

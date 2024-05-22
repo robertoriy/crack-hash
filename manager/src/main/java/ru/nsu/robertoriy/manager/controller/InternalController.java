@@ -2,6 +2,7 @@ package ru.nsu.robertoriy.manager.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +18,7 @@ import ru.nsu.robertoriy.manager.service.manager.ManagerService;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/internal/api/manager")
+@Profile("simple")
 public class InternalController {
     private final ManagerService managerService;
 
@@ -33,6 +35,7 @@ public class InternalController {
         } catch (ServiceException exception) {
             return ResponseEntity.badRequest().build();
         } catch (Exception exception) {
+            log.error("{} {}", exception, exception.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
